@@ -3,11 +3,6 @@ import requests,os,sys
 def usage():
     print("Usage: python3 mirror.py <ip:port>")
 
-if len(sys.argv) > 2 or len(sys.argv) == 1:
-    usage()
-    quit()
-HOST = sys.argv[1]
-
 def get_sitemap(url: str) -> list:
     r = requests.get(f"http://{HOST}/sitemap.txt")
     return r.text.splitlines()
@@ -36,6 +31,10 @@ def sanitize_sitemap(sitemap: list):
         sitemap[l].removeprefix("./")
         sitemap[l] = sitemap[l][2:]
 
+if len(sys.argv) > 2 or len(sys.argv) == 1:
+    usage()
+    quit()
+HOST = sys.argv[1]
 SITEMAP = get_sitemap(HOST)
 sanitize_sitemap(SITEMAP)
 
