@@ -3,6 +3,9 @@ import requests,os,sys
 def usage():
     print("Usage: python3 mirror.py <ip:port>")
 
+if len(sys.argv) > 2 or len(sys.argv) == 1:
+    usage()
+    quit()
 HOST = sys.argv[1]
 
 def get_sitemap(url: str) -> list:
