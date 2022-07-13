@@ -29,6 +29,14 @@ To verify that all files have been downloaded correctly, run `find . -type f -ex
 This does not only verify the correct hierarchy, but also the integrity of the files.
 **NOTE:** The given command does not account for empty directories.
 
+## Dependencies
+
+- argparse
+- termcolor
+- alive_progress
+
+All dependencies can be installed via `pip3`
+
 ## TODO
 
 - fix bash oneliner to verify download
