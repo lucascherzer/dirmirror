@@ -1,4 +1,4 @@
-import requests,os,sys, argparse
+import requests,os,sys, argparse, alive_progress, termcolor
 
 def usage():
     print("Usage: python3 mirror.py <ip:port>")
@@ -33,28 +33,28 @@ def sanitize_sitemap(sitemap: list):
 
 
 parser = argparse.ArgumentParser(description="Mirror directories via an HTTP server",prefix_chars="--")
-parser.add_argument("Host", metavar="host",type=str, nargs=1, help="The host you want to connect to", required=True)
-parser.add_argument("Port", metavar="port", type=str, nargs=1, help="The port on the remote host", required=True)
+parser.add_argument("host", metavar="host",type=str, nargs=1, help="The host you want to connect to")
+parser.add_argument("port", metavar="port", type=str, nargs=1, help="The port on the remote host")
 args = parser.parse_args()
 
 HOST = f"{args.host[0]}:{args.port[0]}"
 SITEMAP = get_sitemap(HOST)
 sanitize_sitemap(SITEMAP)
 
-for endpoint in SITEMAP:
-    url = f"http://{HOST}/{endpoint}"
-    print(f"[*] Sending request: {url}")
-    r = requests.get(url)
-    doc = determine_doctype(url)
-    if doc == "directory":
-        print(f"[{r.status_code}] Creating dir {endpoint}")
-        os.system(f"mkdir ./{endpoint}")
-    elif doc == "file":
-        print(f"[{r.status_code}] Writing file {endpoint}")
-        os.system(f"touch ./{endpoint}")
-        f = open(f"./{endpoint}","w")
-        f.write(r.text)
-        f.close()
-    else:
-        print(f"[{r.status_code}] Potential error with endpoint {endpoint}")
+with alive_progress.alive_bar(total=len(SITEMAP),title="Download progress") as bar:
+    for endpoint in SITEMAP:
+        url = f"http://{HOST}/{endpoint}"
+        bar.text(endpoint)
+        r = requests.get(url)
+        doc = determine_doctype(url)
+        if doc == "directory":
+            os.system(f"mkdir ./{endpoint}")
+        elif doc == "file":
+            os.system(f"touch ./{endpoint}")
+            f = open(f"./{endpoint}","w")
+            f.write(r.text)
+            f.close()
+        else:
+            bar.text(termcolor.colored("ERROR","red"))
+        bar()
 print("Run the following command on both machines to ensure integrity of the files:\n\tfind . -type f -exec md5sum {} + | LC_ALL=C sort | md5sum")
