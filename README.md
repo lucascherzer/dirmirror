@@ -18,10 +18,9 @@ python3 mirror.py <ip address or hostname> 8000
 
 ## How it works
 
-The generated sitemap.txt file contains every file in the directory to mirror. It tells the script what to download.
-The script parses this file and then first sends an HTTP HEAD request to find out what kind of document (primarily directory listing or file) each entry represents. That works because directory listings (at least in the python3 builtin webserver) give a respose code of 301, whereas files give a status of 200.
-
+The files are served by an HTTP server. This script simply utilizes HTTP status codes to determine whether a given page is a file or a directory listing.
 Once the script has figured out which entries are files and which are directory listings, it then simply downloads all files and creates directories where it has to.
+This tool depends on the existance of the `sitemap.txt` file being present on the server as this file contains information on the names of subdirectories and files. 
 
 ## Verifying correct download
 
@@ -33,5 +32,4 @@ This does not only verify the correct hierarchy, but also the integrity of the f
 ## TODO
 
 - fix bash oneliner to verify download
-- improve cli (color, uniform interface,...)
 - maybe: add threading
