@@ -1,4 +1,4 @@
-import requests,os,sys
+import requests,os,sys, argparse
 
 def usage():
     print("Usage: python3 mirror.py <ip:port>")
@@ -31,10 +31,13 @@ def sanitize_sitemap(sitemap: list):
         sitemap[l].removeprefix("./")
         sitemap[l] = sitemap[l][2:] # For some reason, the line above does not remove the prefix, so here we are
 
-if len(sys.argv) > 2 or len(sys.argv) == 1:
-    usage()
-    quit()
-HOST = sys.argv[1]
+
+parser = argparse.ArgumentParser(description="Mirror directories via an HTTP server",prefix_chars="--")
+parser.add_argument("Host", metavar="host",type=str, nargs=1, help="The host you want to connect to", required=True)
+parser.add_argument("Port", metavar="port", type=str, nargs=1, help="The port on the remote host", required=True)
+args = parser.parse_args()
+
+HOST = f"{args.host[0]}:{args.port[0]}"
 SITEMAP = get_sitemap(HOST)
 sanitize_sitemap(SITEMAP)
 

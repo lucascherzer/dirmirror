@@ -3,6 +3,8 @@
 This is a simple python script to mirror directories across different devices
 
 ## Usage
+
+Get help: `python3 mirror.py -h`
 On the machine you want to mirror a directory from:
 ```sh
 find . > sitemap.txt
@@ -11,7 +13,7 @@ python3 -m http.server
 
 On the machine you want to mirror the directory to:
 ```sh
-python3 mirror.py <ip>:8000
+python3 mirror.py <ip address or hostname> 8000
 ```
 
 ## How it works
