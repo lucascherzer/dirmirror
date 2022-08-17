@@ -27,10 +27,8 @@ def sanitize_sitemap(sitemap: list):
         sitemap.pop(0)
     for l in range(len(sitemap)):
         sitemap[l] = sitemap[l].rstrip()
-        sitemap[l].removesuffix("\n")
-        sitemap[l].removeprefix("./")
-        sitemap[l] = sitemap[l][2:] # For some reason, the line above does not remove the prefix, so here we are
-
+        sitemap[l] = sitemap[l].removesuffix("\n")
+        sitemap[l] = sitemap[l].removeprefix("./")
 
 parser = argparse.ArgumentParser(description="Mirror directories via an HTTP server",prefix_chars="--")
 parser.add_argument("host", metavar="host",type=str, nargs=1, help="The host you want to connect to")
