@@ -55,4 +55,4 @@ with alive_progress.alive_bar(total=len(SITEMAP),title="Download progress") as b
         else:
             bar.text(termcolor.colored("ERROR","red"))
         bar()
-print("Run the following command on both machines to ensure integrity of the files:\n\tfind . -type f -exec md5sum {} + | LC_ALL=C sort | md5sum")
+print("Run the following command on both machines to ensure integrity of the files:\n\ttree | md5sum")
