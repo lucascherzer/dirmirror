@@ -2,10 +2,17 @@
 
 This is a simple python script to mirror directories across different devices
 
+## Installation
+```sh
+git clone https://gitlab.com/lucascherzer/directory-mirror.git
+cd directory-mirror
+pip3 install -r requirements.txt
+```
+
 ## Usage
 
 Get help: `python3 mirror.py -h`
-On the machine you want to mirror a directory from:
+On the first machine, in the directory you want to copy
 ```sh
 find . > sitemap.txt
 python3 -m http.server
@@ -15,6 +22,7 @@ On the machine you want to mirror the directory to:
 ```sh
 python3 mirror.py <ip address or hostname> 8000
 ```
+__NOTE__: This script assumes that the two machines are either on the same network, or that machine two can reach port 8000 (or any port for that matter) on machine one.
 
 ## How it works
 
@@ -24,20 +32,10 @@ This tool depends on the existance of the `sitemap.txt` file being present on th
 
 ## Verifying correct download
 
-To verify that all files have been downloaded correctly, run `find . -type f -exec md5sum {} + | LC_ALL=C sort | md5sum` on both machines, if the hashes match, everything should be fine.
+To verify that all files have been downloaded correctly, run `tree | md5sum` on both machines in the mirrored directory, if the hashes match, everything should be fine.
 
 This does not only verify the correct hierarchy, but also the integrity of the files.
-**NOTE:** The given command does not account for empty directories.
-
-## Dependencies
-
-- argparse
-- termcolor
-- alive_progress
-
-All dependencies can be installed via `pip3`
 
 ## TODO
 
-- fix bash oneliner to verify download
 - maybe: add threading
